@@ -1,11 +1,16 @@
+"use client";
+import { register } from "@/actions/auth";
 import Link from "next/link"
+import { useActionState } from "react";
 
 const Register = () => {
+    const [state, action, isPending] = useActionState(register, undefined);
+
     return (
         <div className='container w-1/2'>
             <h1 className='title'>Register</h1>
 
-            <form action="" className='space-y-4'>
+            <form action={action} className='space-y-4'>
                 <div className="">
                     <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
                         Email
@@ -40,8 +45,8 @@ const Register = () => {
                     />
                 </div>
                 <div className="flex items-end gap-4">
-                    <button className='btn-primary'>
-                        Register
+                    <button className='btn-primary' disabled={isPending}>
+                        {isPending ? "Loading..." : "Register"}
                     </button>
                     <Link href='/' className="text-link">
                         Already have an account? Login
