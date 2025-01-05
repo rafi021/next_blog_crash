@@ -1,12 +1,35 @@
 "use server";
 
-export async function register(state, formData) {
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const confirmPassword = formData.get("confirmPassword");
+import { LoginFormSchema, RegisterFormSchema } from "@/lib/rules";
 
-  if (!email || !password || !confirmPassword) {
-    throw new Error("All fields are required.");
+export async function register(state, formData) {
+  // Validate the form
+  const validatedFields = RegisterFormSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      email: formData.get("email"),
+    };
   }
-  console.log(email, password, confirmPassword);
+  console.log(validatedFields);
+}
+
+export async function login(state, formData) {
+  // Perform authentication logic
+  const validatedFields = LoginFormSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      email: formData.get("email"),
+    };
+  }
+  console.log(validatedFields);
 }

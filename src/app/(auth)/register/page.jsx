@@ -19,8 +19,10 @@ const Register = () => {
                         type="email"
                         id="email"
                         name="email"
+                        defaultValue={state?.email}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
                     />
+                    {state?.errors?.email && (<p className="error">{state.errors.email}</p>)}
                 </div>
                 <div className="">
                     <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
@@ -32,6 +34,16 @@ const Register = () => {
                         name="password"
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
                     />
+                    {state?.errors?.password && (
+                        <div className="error">
+                            <p>Password must:</p>
+                            <ul className="list-disc list-inside ml-4">
+                                {state.errors.password.map(err => (
+                                    <li key={err}>{err}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
                 <div className="">
                     <label htmlFor="confirmPassword" className="block text-gray-700 text-sm font-bold mb-2">
@@ -43,6 +55,7 @@ const Register = () => {
                         name="confirmPassword"
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
                     />
+                    {state?.errors?.confirmPassword && (<p className="error">{state.errors.confirmPassword}</p>)}
                 </div>
                 <div className="flex items-end gap-4">
                     <button className='btn-primary' disabled={isPending}>
