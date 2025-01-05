@@ -12,9 +12,17 @@ export default function RootLayout({ children }) {
               <li>
                 <Link className="nav-link" href="/">Home</Link>
               </li>
-              <li>
-                <Link className="nav-link" href="/dashboard">Dashboard</Link>
-              </li>
+              <div className="flex">
+                <li>
+                  <Link className="nav-link" href="/register">Register</Link>
+                </li>
+                <li>
+                  <Link className="nav-link" href="/login">Login</Link>
+                </li>
+                <li>
+                  <Link className="nav-link" href="/dashboard">Dashboard</Link>
+                </li>
+              </div>
             </ul>
           </nav>
         </header>
