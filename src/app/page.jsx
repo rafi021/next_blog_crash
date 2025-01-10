@@ -10,7 +10,7 @@ export default async function Home() {
 
   if (posts) {
     return (
-      <div className="grdi grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-6">
         {
           posts.map((post) => (
             <div className="" key={post._id}>
