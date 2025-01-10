@@ -47,5 +47,56 @@ export async function createPost(state, formData) {
   }
 
   // Redirect
-  redirect("/dashboard");
+  redirect("/");
+}
+
+export async function updatePost(state, formData) {
+  // Check is user is signed in
+  const user = await getAuthUser();
+  if (!user) return redirect("/");
+
+  // Validate form fields
+  const title = formData.get("title");
+  const content = formData.get("content");
+  const postId = formData.get("postId");
+
+  const validatedFields = BlogPostSchema.safeParse({
+    title,
+    content,
+  });
+
+  // If any form fields are invalid
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      title,
+      content,
+    };
+  }
+
+  // Fint the post
+  const postCollection = await getCollection("posts");
+  const post = await postCollection.findOne({
+    _id: ObjectId.createFromHexString(postId),
+  });
+
+  //Check the user owns the post
+  if (user.userId !== post.userId.toString()) return redirect("/");
+
+  // Update post in DB
+  postCollection.findOneAndUpdate(
+    {
+      _id: post._id,
+    },
+    {
+      $set: {
+        title: validatedFields.data.title,
+        content: validatedFields.data.content,
+        updatedAt: new Date(),
+      },
+    }
+  );
+
+  // Redirect
+  redirect("/");
 }
