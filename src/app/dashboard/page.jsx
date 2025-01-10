@@ -1,9 +1,51 @@
+import { getCollection } from '@/lib/db';
+import getAuthUser from '@/lib/getAuthUser'
+import { ObjectId } from 'mongodb';
+import Link from 'next/link';
 import React from 'react'
 
-const Dashboard = () => {
+const Dashboard = async () => {
+    const user = await getAuthUser();
+
+    const postCollection = await getCollection('posts');
+    const userPosts = await postCollection?.
+        find({ userId: ObjectId.createFromHexString(user.userId) })
+        .sort({ $natural: -1 })
+        .toArray();
+
+    if (!userPosts) return <p>Failed to fetch data</p>;
+    if (userPosts.length === 0) return <p>You don't have any post</p>;
+
     return (
-        <div>
-            <h1 className='text-2xl font-semibold'>Dashboard</h1>
+        <div className=''>
+            <h1 className='title'>Dashboard</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th className='w-3/6'>Title</th>
+                        <th className='w-1/6 sr-only'>View</th>
+                        <th className='w-1/6 sr-only'>Edit</th>
+                        <th className='w-1/6 sr-only'>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {userPosts.map((post) => (
+                        <tr key={post._id.toString()}>
+                            <td className='w-3/6'>{post.title}</td>
+                            <td className='w-1/6 text-blue-500'>
+                                <Link href={`/posts/show/${post._id}`}>View</Link>
+                            </td>
+                            <td className='w-1/6 text-green-500'>
+                                <Link href={`/posts/edit/${post._id}`}>Edit</Link>
+                            </td>
+                            <td className='w-1/6 text-red-500'>
+                                delete
+                            </td>
+
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     )
 }
