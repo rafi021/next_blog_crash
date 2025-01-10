@@ -1,5 +1,4 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-import { StrictMode } from "react";
 
 if (!process.env.DB_URI) {
   throw new Error("Mongo URI not found ");

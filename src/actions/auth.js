@@ -1,10 +1,11 @@
 "use server";
 
-import { getCollection } from "@/db";
+import { getCollection } from "@/lib/db";
 
 import bcrypt from "bcrypt";
 import { LoginFormSchema, RegisterFormSchema } from "@/lib/rules";
 import { redirect } from "next/navigation";
+import { createSession } from "@/lib/session";
 
 export async function register(state, formData) {
   // Validate the form
@@ -42,6 +43,7 @@ export async function register(state, formData) {
   });
 
   // Create a Session
+  await createSession(results.insertedId);
 
   // Redirect
   redirect("/dashboard");
