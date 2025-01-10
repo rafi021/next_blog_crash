@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import { LoginFormSchema, RegisterFormSchema } from "@/lib/rules";
 import { redirect } from "next/navigation";
 import { createSession } from "@/lib/session";
+import { cookies } from "next/headers";
 
 export async function register(state, formData) {
   // Validate the form
@@ -80,4 +81,11 @@ export async function login(state, formData) {
   await createSession(user._id.toString());
   // Redirect
   redirect("/dashboard");
+}
+
+export async function logout() {
+  // Clear the session
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
+  redirect("/");
 }

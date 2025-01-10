@@ -1,11 +1,9 @@
 import React from 'react'
 import NavLink from '@/components/NavLink';
 import getAuthUser from '@/lib/getAuthUser';
+import { logout } from '@/actions/auth';
 const Navigation = async () => {
-
     const authUser = await getAuthUser();
-
-
     return (
         <nav>
             <ul>
@@ -13,6 +11,9 @@ const Navigation = async () => {
                 {authUser ? (
                     <div className="flex items-center">
                         <NavLink label="Dashboard" href="/dashboard" />
+                        <form action={logout}>
+                            <button className='nav-link'>Logout</button>
+                        </form>
                     </div>
                 ) : (
                     <div className="">
