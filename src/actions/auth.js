@@ -55,11 +55,29 @@ export async function login(state, formData) {
     email: formData.get("email"),
     password: formData.get("password"),
   });
+  // If any form fields are invalid
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       email: formData.get("email"),
     };
   }
-  console.log(validatedFields);
+
+  // extract form fields
+  const { email, password } = validatedFields.data;
+
+  const userCollection = await getCollection("users");
+  if (!userCollection) return { errors: { email: "Server Error" } };
+  // Check if the email exists in the database
+  const user = await userCollection.findOne({ email });
+  if (!user) return { errors: { email: "Invalid Credentials!!" } };
+
+  // Check if the password matches the hashed password in the database
+  const passwordMatch = await bcrypt.compare(password, user.password);
+  if (!passwordMatch) return { errors: { password: "Incorrect password" } };
+
+  // Create a Session
+  await createSession(user._id.toString());
+  // Redirect
+  redirect("/dashboard");
 }

@@ -1,13 +1,15 @@
 "use client"
+import Link from 'next/link';
 import React from 'react'
 import { useActionState } from 'react';
+import { login } from '@/actions/auth';
 const Login = () => {
-    const [state, action, isPending] = useActionState(Login, undefined)
+    const [state, action, isPending] = useActionState(login, undefined)
     return (
         <div className='container w-1/2'>
             <h1 className='title'>Login</h1>
 
-            <form action="" className='space-y-4'>
+            <form action={action} className='space-y-4'>
                 <div className="">
                     <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
                         Email
@@ -16,6 +18,7 @@ const Login = () => {
                         type="email"
                         id="email"
                         name="email"
+                        defaultValue={state?.email}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
                     />
                     {state?.errors?.email && (<p className='error'>{state?.errors.email}</p>)}
@@ -39,6 +42,7 @@ const Login = () => {
                     >
                         {isPending ? 'Loading...' : "Login"}
                     </button>
+                    <Link href="/register" className='text-link'>or register here</Link>
                 </div>
             </form>
         </div>

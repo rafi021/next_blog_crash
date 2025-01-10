@@ -61,7 +61,7 @@ const Register = () => {
                     <button className='btn-primary' disabled={isPending}>
                         {isPending ? "Loading..." : "Register"}
                     </button>
-                    <Link href='/' className="text-link">
+                    <Link href='/login' className="text-link">
                         Already have an account? Login
                     </Link>
                 </div>
